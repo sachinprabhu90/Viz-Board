@@ -3,7 +3,6 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
 import pandas as pd
-import process
 import tooltip
 
 class Vizboard:
@@ -52,7 +51,7 @@ class Vizboard:
             if self.path:
                 self.data = pd.read_csv(str(self.path))
             else:
-                self.path = filedialog.askopenfilename(initialdir = '/home/linux_fed', title = 'select file',
+                self.path = filedialog.askopenfilename(initialdir = '/home/linux_fed/Desktop', title = 'select file',
                 filetypes = (('excel file','*.xlsx'),('csv files','*.csv')))
                 self.data = self.read_file(self.path)
                 self.path_entry.insert(0,str(self.path))
@@ -83,6 +82,15 @@ class Vizboard:
         ttk.Label(self.options_frame,text = 'Y:').grid(row=0,column=2,padx=2,pady=2)
         self.column_drop.grid(row=0,column=3,padx=2,pady=2)
         #self.tkvar2.trace('w',self.change_dropdown)
+
+        #column for label_tooltip
+
+        self.tkvar3 = StringVar(master)
+        columns = list(self.data.columns)
+        self.tkvar3.set(columns[2])
+        self.column_drop = OptionMenu(self.options_frame,self.tkvar3,*columns)
+        ttk.Label(self.options_frame, text = 'Label').grid(row=0,column=12)
+        self.column_drop.grid(row=0,column=13,padx=2,pady=2)
 
         #lims for x and y
         ttk.Label(self.options_frame, text = 'Lower xlim: ').grid(row=0,column=4,padx=2,pady=2)
@@ -115,7 +123,8 @@ class Vizboard:
                                                                   self.low_xlim_entry.get(),
                                                                   self.low_ylim_entry.get(),
                                                                   self.high_xlim_entry.get(),
-                                                                  self.high_ylim_entry.get()
+                                                                  self.high_ylim_entry.get(),
+                                                                  self.tkvar3.get()
                                                                   )
                                         )
         self.line_btn = ttk.Button(self.buttons_frame,text = 'Line Plot',
@@ -126,7 +135,8 @@ class Vizboard:
                                                                        self.low_xlim_entry.get(),
                                                                        self.low_ylim_entry.get(),
                                                                        self.high_xlim_entry.get(),
-                                                                       self.high_ylim_entry.get()
+                                                                       self.high_ylim_entry.get(),
+                                                                       self.tkvar3.get()
                                                                        )
                                     )
 
